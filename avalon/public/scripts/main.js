@@ -15,6 +15,9 @@
  */
 'use strict';
 
+
+var userId = ''
+
 // Signs-in Friendly Chat.
 function signIn() {
   // Sign in Firebase using popup auth and Google as the identity provider.
@@ -65,7 +68,7 @@ function saveMessage(messageText) {
 // Loads chat messages history and listens for upcoming ones.
 function loadMessages() {
   // Create the query to load the last 12 messages and listen for new ones.
-  var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(12);
+  var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(5);
   
   // Start listening to the query.
   query.onSnapshot(function(snapshot) {
@@ -74,11 +77,28 @@ function loadMessages() {
         deleteMessage(change.doc.id);
       } else {
         var message = change.doc.data();
+        var text = processMessageText(message.text)
         displayMessage(change.doc.id, message.timestamp, message.name,
-                       message.text, message.profilePicUrl, message.imageUrl);
+          text, message.profilePicUrl, message.imageUrl);
       }
     });
   });
+}
+
+function processMessageText(text) {
+  //console.log('OriginalMessage: ' + text)
+  try {
+    var json = JSON.parse(text)
+    var result = json[userId]
+    if (result === undefined) {
+      result = 'Hay nhap ten nguoi choi'
+    }
+    console.log('Message: ' + result)
+    return result
+  } catch (error) {
+    return text
+  }
+
 }
 
 // Saves a new message containing an image in Firebase.
@@ -164,13 +184,26 @@ function onMessageFormSubmit(e) {
   e.preventDefault();
   // Check that the user entered a message and is signed in.
   if (messageInputElement.value && checkSignedInWithMessage()) {
-    saveMessage(messageInputElement.value).then(function() {
+    userId = messageInputElement.value 
+    console.log(`UserID: ${userId}`)
+    saveMessage('player: ' + userId).then(function() {
       // Clear message text field and re-enable the SEND button.
       resetMaterialTextfield(messageInputElement);
       toggleButton();
     });
   }
 }
+
+// pnhlong
+function onNewSessonClicked(){
+  saveMessage('startNewSession')
+
+}
+
+function onNewGameClicked(){
+  saveMessage('startNewGame')
+}
+
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
 function authStateObserver(user) {
@@ -297,8 +330,7 @@ function createAndInsertMessage(id, timestamp) {
 // Displays a Message in the UI.
 function displayMessage(id, timestamp, name, text, picUrl, imageUrl) {
   var div = document.getElementById(id) || createAndInsertMessage(id, timestamp);
-
-  // profile picture
+ // profile picture
   if (picUrl) {
     div.querySelector('.pic').style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(picUrl) + ')';
   }
@@ -351,7 +383,7 @@ checkSetup();
 var messageListElement = document.getElementById('messages');
 var messageFormElement = document.getElementById('message-form');
 var messageInputElement = document.getElementById('message');
-var submitButtonElement = document.getElementById('submit');
+var submitButtonElement = document.getElementById('submit'); 
 var imageButtonElement = document.getElementById('submitImage');
 var imageFormElement = document.getElementById('image-form');
 var mediaCaptureElement = document.getElementById('mediaCapture');
@@ -361,6 +393,13 @@ var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 
+// admin pannel
+var newSessionButtonElement = document.getElementById('start-new-session');
+var newGameButtonElement = document.getElementById('start-new-game');
+
+
+
+
 // Saves message on form submit.
 messageFormElement.addEventListener('submit', onMessageFormSubmit);
 signOutButtonElement.addEventListener('click', signOut);
@@ -369,6 +408,9 @@ signInButtonElement.addEventListener('click', signIn);
 // Toggle for the button.
 messageInputElement.addEventListener('keyup', toggleButton);
 messageInputElement.addEventListener('change', toggleButton);
+
+newSessionButtonElement.addEventListener('click', onNewSessonClicked);
+newGameButtonElement.addEventListener('click', onNewGameClicked);
 
 // Events for image upload.
 imageButtonElement.addEventListener('click', function(e) {

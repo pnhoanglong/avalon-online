@@ -15,9 +15,72 @@
  */
 
 // TODO(DEVELOPER): Import the Cloud Functions for Firebase and the Firebase Admin modules here.
+// Import the Firebase SDK for Google Cloud Functions.
+const functions = require('firebase-functions');
+// Import and initialize the Firebase Admin SDK.
+const admin = require('firebase-admin');
+admin.initializeApp();
 
-// TODO(DEVELOPER): Write the addWelcomeMessages Function here.
+const avalon = require('./avalon.js')
 
-// TODO(DEVELOPER): Write the blurOffensiveImages Function here.
+function initPlayers() {
+  players = []
+  //players = ['2 danh', '3 minh', '4 sang', '5 viet anh', '6 quin', '7 myp', '8 hien',  '9 an', '10 Tuan anh']
+}
+initPlayers()
 
-// TODO(DEVELOPER): Write the sendNotifications Function here.
+var playerKeyword = 'player: '
+
+
+exports.runAvalonGame = functions.firestore.document('messages/{messageId}').onCreate(
+  async (snapshot) => {
+    // Notification details.
+    const text = snapshot.data().text;
+
+    switch (text){
+      case 'startNewSession':
+        startNewSession()
+        break;
+      
+        case 'startNewGame':
+        startNewGame()
+        break;
+        
+      default:
+        if (text.startsWith(playerKeyword)) {
+          onNewPlayerJoined(text)
+        }
+          break;
+    }
+  });
+
+function onNewPlayerJoined(text) {
+  var player = text.replace(playerKeyword, '')
+  players.push(player)    
+  var message = `New player joined: ${player}, count = ${players.length}: ${players}`
+  console.log(message)
+  saveMessage(message)
+}
+
+
+function startNewSession() {
+  console.log('Start a new session, waiting for player to join.');    
+  initPlayers()
+}
+
+function startNewGame() {
+  console.log('Start a new game with '+ players.length + ' players: ' + players.toString())
+  var story = avalon.startGame(players)
+  console.log('Game story ' + story)
+  saveMessage(story)
+}
+
+function saveMessage(text) {
+  admin.firestore().collection('messages').add({
+    name: 'Master of the game',
+    profilePicUrl: '', 
+    text: text,
+    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+  });
+}
+

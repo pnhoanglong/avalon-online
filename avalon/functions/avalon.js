@@ -83,32 +83,30 @@ function assignRole(players) {
     return result
 }
 
-
-
-function startGame(players){
-    var playerCount = players.length
-    roleAssignedPlayers = assignRole(players)
-
-    // Create instruction
-    var instructions = {}
-    instructions[roleAssignedPlayers[0]] = createMerlinInstructions()
-    instructions[roleAssignedPlayers[1]] = createPercivalInstructions()
-
-    // Devils
-    instructions[roleAssignedPlayers[2]] = createOneDevilInstructions(2)
-    instructions[roleAssignedPlayers[3]] = createOneDevilInstructions(3)
-    instructions[roleAssignedPlayers[4]] = createOneDevilInstructions(4)
-
-    // Humans
-    for (let i = 5; i< playerCount; i++) {
-        instructions[roleAssignedPlayers[i]] = createSinglePlayerInstructions(i)
-    }
-
-    // Oberon
-    if (roleAssignedPlayers.length > OBERON_POS){
-        instructions[roleAssignedPlayers[OBERON_POS]] = createSinglePlayerInstructions(OBERON_POS)
-    }
-
-    return JSON.stringify(instructions)
+exports.startGame  = function startGame(players){
+        var playerCount = players.length
+        roleAssignedPlayers = assignRole(players)
     
+        // Create instruction
+        var instructions = {}
+        instructions[roleAssignedPlayers[0]] = createMerlinInstructions()
+        instructions[roleAssignedPlayers[1]] = createPercivalInstructions()
+    
+        // Devils
+        instructions[roleAssignedPlayers[2]] = createOneDevilInstructions(2)
+        instructions[roleAssignedPlayers[3]] = createOneDevilInstructions(3)
+        instructions[roleAssignedPlayers[4]] = createOneDevilInstructions(4)
+    
+        // Humans
+        for (let i = 5; i< playerCount; i++) {
+            instructions[roleAssignedPlayers[i]] = createSinglePlayerInstructions(i)
+        }
+    
+        // Oberon
+        if (roleAssignedPlayers.length > OBERON_POS){
+            instructions[roleAssignedPlayers[OBERON_POS]] = createSinglePlayerInstructions(OBERON_POS)
+        }
+    
+        return JSON.stringify(instructions)   
 }
+
