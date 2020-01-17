@@ -56,8 +56,12 @@ exports.runAvalonGame = functions.firestore.document('messages/{messageId}').onC
 
 function onNewPlayerJoined(text) {
   var player = text.replace(playerKeyword, '')
-  players.push(player)    
-  var message = `New player joined: ${player}, count = ${players.length}: ${players}`
+  if (!players.includes(player)) {
+    players.push(player)
+    var message = `New player joined: ${player}, count = ${players.length}: ${players}`    
+  } else {
+    var message = "Duplicated player."
+  }
   console.log(message)
   saveMessage(message)
 }
@@ -74,12 +78,12 @@ function startNewGame() {
   console.log('Game story ' + story)
   saveMessage(story)
   
-  if (story === undefined) return
+  if (JSON.parse(story) === undefined) return
 
   // Chooes the king
   var king = avalon.chooseKing(players)
-  console.log('Vua la ' + king)
-  saveMessage('Vua la ' + king)
+  console.log('King is ' + king)
+  saveMessage('KING is ' + king)
 
 }
 

@@ -16,7 +16,7 @@
 'use strict';
 
 
-var userId = ''
+var userIdKey = 'userId'
 
 // Signs-in Friendly Chat.
 function signIn() {
@@ -67,6 +67,8 @@ function saveMessage(messageText) {
 
 // Loads chat messages history and listens for upcoming ones.
 function loadMessages() {
+  console.log('UserName: ' + localStorage.getItem(userIdKey))
+
   // Create the query to load the last 12 messages and listen for new ones.
   var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(5);
   
@@ -86,15 +88,14 @@ function loadMessages() {
 }
 
 function processMessageText(text) {
-  //console.log('OriginalMessage: ' + text)
   try {
     var json = JSON.parse(text)
-    var result = json[userId]
+    var result = json[localStorage.getItem(userIdKey)]
     if (result === undefined) {
-      result = 'Hay nhap ten nguoi choi'
+      result = 'Please input your name.'
     }
     console.log('Message: ' + result)
-    return result
+    return result.replace(/,/g, '  --  ')
   } catch (error) {
     return text
   }
@@ -184,14 +185,24 @@ function onMessageFormSubmit(e) {
   e.preventDefault();
   // Check that the user entered a message and is signed in.
   if (messageInputElement.value && checkSignedInWithMessage()) {
-    userId = messageInputElement.value 
+    var userId = messageInputElement.value 
     console.log(`UserID: ${userId}`)
+
+    // pnhoanglong setText for user name
+    localStorage.setItem(userIdKey, userId)
+    getSavedUserId()
+
     saveMessage('player: ' + userId).then(function() {
       // Clear message text field and re-enable the SEND button.
       resetMaterialTextfield(messageInputElement);
       toggleButton();
     });
   }
+}
+
+function getSavedUserId() {
+  var userId = localStorage.getItem(userIdKey, userId)
+  console.log(`SavedUserId: ${userId}`)
 }
 
 // pnhlong

@@ -1,5 +1,6 @@
 
 var OBERON_POS = 9
+var SERVANT = "Arthur's Servant"
 // Constants
 var ROLES = [
     'Merlin', //0
@@ -7,10 +8,10 @@ var ROLES = [
     'Mordred', //2
     'Morgana', //3
     'Assassin', //4
-    'Trung Than', //5
-    'Trung Than', //6
-    'Trung Than', //7
-    'Trung Than', //8
+    SERVANT, //5
+    SERVANT, //6
+    SERVANT, //7
+    SERVANT, //8
     'Oberon' //9
 ]
 var roleAssignedPlayers = [""]
@@ -20,7 +21,7 @@ var roleAssignedPlayers = [""]
  */
 function createMerlinInstructions() {
     var pos = 0
-    return roleAssignedPlayers[pos].concat(" la ", ROLES[pos], ". ", createAllDevilInstructions(true))
+    return roleAssignedPlayers[pos].concat(" is ", ROLES[pos], ". ", createAllDevilInstructions(true))
 }
 
 
@@ -31,14 +32,14 @@ function createPercivalInstructions() {
     var pos = 1
     var objects = [roleAssignedPlayers[0],roleAssignedPlayers[3]]
     objects.sort()
-    return roleAssignedPlayers[pos].concat(" la ", ROLES[pos], ". Merlin va Morgana: ", objects.toString())
+    return roleAssignedPlayers[pos].concat(" is ", ROLES[pos], ". Merlin and Morgana are ", objects.toString())
 }
 
 /**
  * DEVILS
  */
 function createOneDevilInstructions(pos) {
-    return roleAssignedPlayers[pos].concat(" la ",ROLES[pos], ". ", createAllDevilInstructions(false))
+    return roleAssignedPlayers[pos].concat(" is ",ROLES[pos], ". ", createAllDevilInstructions(false))
 }
 
 function createAllDevilInstructions(forMerlin) {
@@ -51,11 +52,8 @@ function createAllDevilInstructions(forMerlin) {
     if (roleAssignedPlayers.length > OBERON_POS && forMerlin){
         devils.push(roleAssignedPlayers[OBERON_POS])
     }
-    // Sort quy
-    //console.log("quy chua sort: %s", quy.toString())
     devils.sort()
-    //console.log("quy DA sort: %s", quy.toString())
-    return "Quy la: ".concat(devils.toString())
+    return "Evils are: ".concat(devils.toString())
 }
 
 /**
@@ -63,7 +61,7 @@ function createAllDevilInstructions(forMerlin) {
  * @param {*} pos 
  */
 function createSinglePlayerInstructions(pos) {
-    return roleAssignedPlayers[pos].concat(" la ",ROLES[pos])
+    return roleAssignedPlayers[pos].concat(" is ",ROLES[pos])
 }
 
 
