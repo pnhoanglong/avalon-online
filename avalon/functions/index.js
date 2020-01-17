@@ -25,7 +25,7 @@ const avalon = require('./avalon.js')
 
 function initPlayers() {
   players = []
-  //players = ['2 danh', '3 minh', '4 sang', '5 viet anh', '6 quin', '7 myp', '8 hien',  '9 an', '10 Tuan anh']
+  //players = ['Danh', 'Minh', 'Sang', 'Viet Anh', 'Quin', 'Myp', 'Hen',  'An', 'Dao']
 }
 initPlayers()
 
@@ -73,6 +73,14 @@ function startNewGame() {
   var story = avalon.startGame(players)
   console.log('Game story ' + story)
   saveMessage(story)
+  
+  if (story === undefined) return
+
+  // Chooes the king
+  var king = avalon.chooseKing(players)
+  console.log('Vua la ' + king)
+  saveMessage('Vua la ' + king)
+
 }
 
 function saveMessage(text) {
