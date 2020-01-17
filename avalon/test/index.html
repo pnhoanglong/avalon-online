@@ -1,0 +1,31 @@
+<head>
+    <script type="text/javascript" src="../functions/avalon.js"></script>
+    <script type="text/javascript">
+    
+    var players = [
+        'Long',
+        'Danh',
+        'Sang',
+        'Minh',
+        'V.Anh',
+        'Quin',
+        'Myp',
+        'Thien',
+        'Dao',
+        'Luan',
+    ]
+
+    var result = JSON.parse(startGame(players))
+    for (let i = 0; i< players.length; i++) {
+        document.write(result[players[i]])
+        document.write('</br></br>')
+    }
+
+</script>
+
+
+</head>
+
+<body>
+
+</body>
