@@ -85,6 +85,11 @@ function assignRole(players) {
 
 exports.startGame  = function startGame(players){
         var playerCount = players.length
+
+        if(playerCount < 7 || playerCount > 10) {
+            return "Players count must be (7<= N <=10), current count = " + playerCount
+        }
+
         roleAssignedPlayers = assignRole(players)
     
         // Create instruction
