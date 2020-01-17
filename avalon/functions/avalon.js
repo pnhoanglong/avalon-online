@@ -115,3 +115,9 @@ exports.startGame  = function startGame(players){
         return JSON.stringify(instructions)   
 }
 
+
+exports.chooseKing  = function chooseKing(players){
+    // Chooes the king
+  var kingPos = Math.floor(Math.random() * players.length)
+  return  players[kingPos]
+}
