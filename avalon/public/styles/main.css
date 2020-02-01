@@ -104,7 +104,7 @@ main, #messages-card {
 #message-form {
   display: flex;
   flex-direction: row;
-  width: calc(100% - 48px);
+  width: calc(100% - 4px);
   float: left;
 }
 #image-form {
@@ -120,6 +120,11 @@ main, #messages-card {
   width: 100px;
   margin: 15px 0 0 10px;
 }
+
+#message-form button#join-game  {
+  width: 100%;
+}
+
 .mdl-card {
   min-height: 0;
 }
