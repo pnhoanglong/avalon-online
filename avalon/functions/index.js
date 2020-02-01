@@ -23,12 +23,20 @@ admin.initializeApp();
 
 const avalon = require('./avalon.js')
 
+var debug = false
+
 function initPlayers() {
-  players = []
-  //players = ['Danh', 'Minh', 'Sang', 'Viet Anh', 'Quin', 'Myp', 'Hen',  'An', 'Dao']
+  if (debug) {
+    // debug mode: 8 players added
+    players = ['Danh', 'Minh', 'Sang', 'Viet Anh', 'Quin', 'Myp', 'Hen',  'An']
+  } else {
+    players = []
+  }
 }
+
 initPlayers()
 
+///////////// KEY ////////////
 // SERVER - CLIENT key
 var voteKey = 'vote:'
 
@@ -38,6 +46,12 @@ var newPlayerKey = 'New player: '
 // Game story
 var gameStoryKey = 'gameStory:'
 
+// Default user name
+var defaultUserName = 'Master of the game'
+
+///////////// KEY ////////////
+
+
 
 
 exports.runAvalonGame = functions.firestore.document('messages/{messageId}').onCreate(
@@ -45,7 +59,7 @@ exports.runAvalonGame = functions.firestore.document('messages/{messageId}').onC
     // Notification details.
     const text = snapshot.data().text;
     console.log (text)
-    
+
     switch (text){
       case 'startNewSession':
         startNewSession()
@@ -83,22 +97,28 @@ function startNewSession() {
 function startNewGame() {
   console.log('Start a new game with '+ players.length + ' players: ' + players.toString())
   var story = avalon.startGame(players)
+
+  try {
+    JSON.parse(story)
+  } catch (exception) {
+    // Invalid players
+    saveMessage(story)
+    return
+  } 
+
   var message = gameStoryKey + story
   saveMessage(message)
   
-  if (JSON.parse(story) === undefined) return
-
   // Chooes the king
   var king = avalon.chooseKing(players)
   message = 'KING is ' + king
   saveMessage(message)
-
 }
 
 function saveMessage(text) {
   console.log(text)
   admin.firestore().collection('messages').add({
-    name: 'Master of the game',
+    name: defaultUserName,
     profilePicUrl: '', 
     text: text,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
