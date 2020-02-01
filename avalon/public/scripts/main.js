@@ -17,6 +17,8 @@
 
 
 var userIdKey = 'userId'
+var playKey = 'player:'
+var voteKey = 'vote:'
 
 // Signs-in Friendly Chat.
 function signIn() {
@@ -44,6 +46,7 @@ function getProfilePicUrl() {
 
 // Returns the signed-in user's display name.
 function getUserName() {
+  //return 'Long Pham'
   return firebase.auth().currentUser.displayName;
 }
 
@@ -54,6 +57,7 @@ function isUserSignedIn() {
 
 // Saves a new message on the Cloud Firestore.
 function saveMessage(messageText) {
+  console.log(messageText)
   // Add a new message entry to the Firebase database.
   return firebase.firestore().collection('messages').add({
     name: getUserName(),
@@ -67,8 +71,6 @@ function saveMessage(messageText) {
 
 // Loads chat messages history and listens for upcoming ones.
 function loadMessages() {
-  console.log('UserName: ' + localStorage.getItem(userIdKey))
-
   // Create the query to load the last 12 messages and listen for new ones.
   var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(5);
   
@@ -163,7 +165,7 @@ function onMediaFileSelected(event) {
   var file = event.target.files[0];
 
   // Clear the selection in the file picker input.
-  imageFormElement.reset();
+  //imageFormElement.reset();
 
   // Check if the file is an image.
   if (!file.type.match('image.*')) {
@@ -185,34 +187,13 @@ function onMessageFormSubmit(e) {
   e.preventDefault();
   // Check that the user entered a message and is signed in.
   if (messageInputElement.value && checkSignedInWithMessage()) {
-    var userId = messageInputElement.value 
-    console.log(`UserID: ${userId}`)
-
-    // pnhoanglong setText for user name
-    localStorage.setItem(userIdKey, userId)
-    getSavedUserId()
-
-    saveMessage('player: ' + userId).then(function() {
+    
+    saveMessage(messageInputElement.value).then(function() {
       // Clear message text field and re-enable the SEND button.
       resetMaterialTextfield(messageInputElement);
       toggleButton();
     });
   }
-}
-
-function getSavedUserId() {
-  var userId = localStorage.getItem(userIdKey, userId)
-  console.log(`SavedUserId: ${userId}`)
-}
-
-// pnhlong
-function onNewSessonClicked(){
-  saveMessage('startNewSession')
-
-}
-
-function onNewGameClicked(){
-  saveMessage('startNewGame')
 }
 
 
@@ -226,6 +207,9 @@ function authStateObserver(user) {
     // Set the user's profile pic and name.
     userPicElement.style.backgroundImage = 'url(' + addSizeToGoogleProfilePic(profilePicUrl) + ')';
     userNameElement.textContent = userName;
+
+    // pnhlong
+    saveLoggedInUsername(userName)
 
     // Show user's profile and sign-out button.
     userNameElement.removeAttribute('hidden');
@@ -395,8 +379,8 @@ var messageListElement = document.getElementById('messages');
 var messageFormElement = document.getElementById('message-form');
 var messageInputElement = document.getElementById('message');
 var submitButtonElement = document.getElementById('submit'); 
-var imageButtonElement = document.getElementById('submitImage');
-var imageFormElement = document.getElementById('image-form');
+//var imageButtonElement = document.getElementById('submitImage');
+//var imageFormElement = document.getElementById('image-form');
 var mediaCaptureElement = document.getElementById('mediaCapture');
 var userPicElement = document.getElementById('user-pic');
 var userNameElement = document.getElementById('user-name');
@@ -404,9 +388,6 @@ var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 
-// admin pannel
-var newSessionButtonElement = document.getElementById('start-new-session');
-var newGameButtonElement = document.getElementById('start-new-game');
 
 
 
@@ -420,15 +401,76 @@ signInButtonElement.addEventListener('click', signIn);
 messageInputElement.addEventListener('keyup', toggleButton);
 messageInputElement.addEventListener('change', toggleButton);
 
-newSessionButtonElement.addEventListener('click', onNewSessonClicked);
-newGameButtonElement.addEventListener('click', onNewGameClicked);
 
 // Events for image upload.
-imageButtonElement.addEventListener('click', function(e) {
+// imageButtonElement.addEventListener('click', function(e) {
+//   e.preventDefault();
+//   mediaCaptureElement.click();
+// });
+// mediaCaptureElement.addEventListener('change', onMediaFileSelected);
+
+
+
+// pnhlong
+var newSessionButtonElement = document.getElementById('start-new-session');
+var newGameButtonElement = document.getElementById('start-new-game');
+var joinGameButtonElement = document.getElementById('join-game');
+var voteUpButtonElement = document.getElementById('vote-up');
+var voteDownButtonElement = document.getElementById('vote-down');
+
+
+
+// Event listener
+
+function saveLoggedInUsername(userName) {
+  localStorage.setItem(userIdKey, userName)
+  console.log('UserName: ' + userName)
+}
+
+
+function onNewSessonClicked(e){
   e.preventDefault();
-  mediaCaptureElement.click();
-});
-mediaCaptureElement.addEventListener('change', onMediaFileSelected);
+  saveMessage('startNewSession')
+
+}
+
+function onNewGameClicked(e){
+  e.preventDefault();
+  saveMessage('startNewGame')
+}
+
+
+
+// Triggered when the send new message form is submitted.
+function onJoinGameClick(e) {
+  e.preventDefault();
+  // Check that the user entered a message and is signed in.
+  if (checkSignedInWithMessage()) {
+    var userId = localStorage.getItem(userIdKey)
+    var message = `UserID: ${userId}`
+    saveMessage(message)
+  }
+}
+
+function onVoteUpClicked(e) {
+  e.preventDefault();
+  var message = voteKey + 'Succeed'
+  saveMessage(message)
+}
+
+function onVoteDownClicked(e) {
+  e.preventDefault();
+  var message = voteKey + 'Fail'
+  saveMessage(message)
+}
+
+
+newSessionButtonElement.addEventListener('click', onNewSessonClicked);
+newGameButtonElement.addEventListener('click', onNewGameClicked);
+joinGameButtonElement.addEventListener('click', onJoinGameClick);
+voteUpButtonElement.addEventListener('click', onVoteUpClicked);
+voteDownButtonElement.addEventListener('click', onVoteDownClicked);
+
 
 // initialize Firebase
 initFirebaseAuth();
