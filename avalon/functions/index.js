@@ -29,14 +29,23 @@ function initPlayers() {
 }
 initPlayers()
 
-var playerKeyword = 'player: '
+// SERVER - CLIENT key
+var voteKey = 'vote:'
+
+// New player join
+var newPlayerKey = 'New player: '
+
+// Game story
+var gameStoryKey = 'gameStory:'
+
 
 
 exports.runAvalonGame = functions.firestore.document('messages/{messageId}').onCreate(
   async (snapshot) => {
     // Notification details.
     const text = snapshot.data().text;
-
+    console.log (text)
+    
     switch (text){
       case 'startNewSession':
         startNewSession()
@@ -47,7 +56,7 @@ exports.runAvalonGame = functions.firestore.document('messages/{messageId}').onC
         break;
         
       default:
-        if (text.startsWith(playerKeyword)) {
+        if (text.includes(newPlayerKey)) {
           onNewPlayerJoined(text)
         }
           break;
@@ -55,14 +64,13 @@ exports.runAvalonGame = functions.firestore.document('messages/{messageId}').onC
   });
 
 function onNewPlayerJoined(text) {
-  var player = text.replace(playerKeyword, '')
+  var player = text.replace(newPlayerKey, '')
   if (!players.includes(player)) {
     players.push(player)
     var message = `New player joined: ${player}, count = ${players.length}: ${players}`    
   } else {
     var message = "Duplicated player."
   }
-  console.log(message)
   saveMessage(message)
 }
 
@@ -75,19 +83,20 @@ function startNewSession() {
 function startNewGame() {
   console.log('Start a new game with '+ players.length + ' players: ' + players.toString())
   var story = avalon.startGame(players)
-  console.log('Game story ' + story)
-  saveMessage(story)
+  var message = gameStoryKey + story
+  saveMessage(message)
   
   if (JSON.parse(story) === undefined) return
 
   // Chooes the king
   var king = avalon.chooseKing(players)
-  console.log('King is ' + king)
-  saveMessage('KING is ' + king)
+  message = 'KING is ' + king
+  saveMessage(message)
 
 }
 
 function saveMessage(text) {
+  console.log(text)
   admin.firestore().collection('messages').add({
     name: 'Master of the game',
     profilePicUrl: '', 
