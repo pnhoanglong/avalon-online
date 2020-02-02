@@ -23,6 +23,7 @@ admin.initializeApp();
 
 const avalon = require('./avalon.js')
 
+//var debug = true 
 var debug = false
 
 function initPlayers() {
