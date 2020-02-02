@@ -67,7 +67,7 @@ function saveMessage(messageText) {
 // Loads chat messages history and listens for upcoming ones.
 function loadMessages() {
   // Create the query to load the last 12 messages and listen for new ones.
-  var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(5);
+  var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(10);
   
   // Start listening to the query.
   query.onSnapshot(function(snapshot) {
