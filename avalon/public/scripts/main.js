@@ -327,7 +327,7 @@ if (text) { // If the message is text.
 // Show the card fading-in and scroll to view the new message.
 setTimeout(function() {div.classList.add('visible')}, 1);
 messageListElement.scrollTop = messageListElement.scrollHeight;
-messageInputElement.focus();
+//messageInputElement.focus();
 }
 
 // Enables or disables the submit button depending on the values of the input
@@ -436,9 +436,8 @@ function processMessage(change){
   }
 
   // Process message text
-  console.log("ORIGINAL message: " + text)
   text = processMessageText(text)
-  console.log("Displayed message: " + text)
+  console.log(text)
 
   displayMessage(change.doc.id, message.timestamp, userName,
     text, userPic, message.imageUrl);
