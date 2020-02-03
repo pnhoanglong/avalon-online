@@ -1,0 +1,26 @@
+[debug] [2020-02-03T11:45:30.558Z] ----------------------------------------------------------------------
+[debug] [2020-02-03T11:45:30.560Z] Command:       /Users/longpham/.asdf/installs/nodejs/11.6.0/bin/node /Users/longpham/.asdf/installs/nodejs/11.6.0/.npm/bin/firebase serve --only hosting
+[debug] [2020-02-03T11:45:30.560Z] CLI Version:   7.12.1
+[debug] [2020-02-03T11:45:30.560Z] Platform:      darwin
+[debug] [2020-02-03T11:45:30.560Z] Node Version:  v11.6.0
+[debug] [2020-02-03T11:45:30.561Z] Time:          Mon Feb 03 2020 18:45:30 GMT+0700 (Indochina Time)
+[debug] [2020-02-03T11:45:30.561Z] ----------------------------------------------------------------------
+[debug] [2020-02-03T11:45:30.561Z] 
+[debug] [2020-02-03T11:45:30.568Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-02-03T11:45:30.568Z] > authorizing via signed-in user
+[debug] [2020-02-03T11:45:30.568Z] [iam] checking project online-avalon for permissions ["firebase.projects.get"]
+[debug] [2020-02-03T11:45:30.569Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-02-03T11:45:30.570Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-02-03T11:45:30.881Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-03T11:45:30.894Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/online-avalon:testIamPermissions  
+
+[debug] [2020-02-03T11:45:32.256Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-03T11:45:32.257Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/online-avalon  
+ 
+[debug] [2020-02-03T11:45:32.759Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-03T11:45:32.760Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/online-avalon/webApps/-/config  
+ 
+[debug] [2020-02-03T11:45:33.684Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: ./public
+[info] ✔  hosting: Local server: http://localhost:5000

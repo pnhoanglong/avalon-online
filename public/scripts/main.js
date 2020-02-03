@@ -142,7 +142,6 @@ function requestNotificationsPermissions() {
 
 // Triggered when a file is selected via the media picker.
 function onMediaFileSelected(event) {
-  event.preventDefault();
   var file = event.target.files[0];
 
 // Clear the selection in the file picker input.
@@ -165,7 +164,6 @@ if (checkSignedInWithMessage()) {
 
 // Triggered when the send new message form is submitted.
 function onMessageFormSubmit(e) {
-  e.preventDefault();
 // Check that the user entered a message and is signed in.
 if (messageInputElement.value && checkSignedInWithMessage()) {
 
@@ -440,7 +438,7 @@ function processMessage(change){
 
   // Process message text
   text = processMessageText(text)
-  console.log(text)
+  console.log("Show: " + text)
 
   displayMessage(change.doc.id, message.timestamp, messageUserName,
     text, userPic, message.imageUrl);
@@ -471,13 +469,11 @@ function saveLoggedInUsername(userName) {
 
 
 function onNewSessonClicked(e){
-  e.preventDefault();
   saveMessage('startNewSession')
 
 }
 
 function onNewGameClicked(e){
-  e.preventDefault();
   saveMessage('startNewGame')
 }
 
@@ -493,7 +489,6 @@ function getPlayerName() {
 
 // Triggered when the send new message form is submitted.
 function onJoinGameClick(e) {
-  e.preventDefault();
   // Check that the user entered a message and is signed in.
   if (checkSignedInWithMessage()) {
     var userId = getPlayerName()
@@ -503,13 +498,11 @@ function onJoinGameClick(e) {
 }
 
 function onVoteUpClicked(e) {
-  e.preventDefault();
   var message = voteKey + succeedKey;
   saveMessage(message);
 }
 
 function onVoteDownClicked(e) {
-  e.preventDefault();
   var message = voteKey + failKey;
   saveMessage(message);
 }
