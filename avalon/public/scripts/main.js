@@ -41,8 +41,11 @@ function getProfilePicUrl() {
 
 // Returns the signed-in user's display name.
 function getUserName() {
-  //return 'Long Pham'
-  return firebase.auth().currentUser.displayName;
+  try {
+    return firebase.auth().currentUser.displayName;
+  } catch (except) {
+    return defaultUserName  
+  }
 }
 
 // Returns true if a user is signed-in.
@@ -478,9 +481,13 @@ function onNewGameClicked(e){
   saveMessage('startNewGame')
 }
 
-
+var playerName 
 function getPlayerName() {
-  return localStorage.getItem(userIdKey);
+  if (playerName !== undefined) return playerName
+
+  var googleUserName = localStorage.getItem(userIdKey)
+  playerName = googleUserName.split(' ', 2).toString().replace(',', ' ')
+  return playerName
 }
 
 
