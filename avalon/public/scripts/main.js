@@ -424,13 +424,13 @@ var defaultUserName = 'Master of the game'
 function processMessage(change){
   var message = change.doc.data()
   var text = message.text;
-  var userName = message.name
+  var messageUserName = message.name
   var userPic = message.profilePicUrl
 
   // voting case
-  if (text.startsWith(voteKey)) { 
+  if (text.startsWith(voteKey) && messageUserName.includes(getUserName()) == false) { 
       // Hide user name and profile pic
-      userName = defaultUserName
+      messageUserName = defaultUserName
       userPic = ''
       text = text.replace(voteKey, '')
   }
@@ -439,7 +439,7 @@ function processMessage(change){
   text = processMessageText(text)
   console.log(text)
 
-  displayMessage(change.doc.id, message.timestamp, userName,
+  displayMessage(change.doc.id, message.timestamp, messageUserName,
     text, userPic, message.imageUrl);
 }
 
@@ -447,7 +447,7 @@ function processMessageText(text) {
   // Game story
   if (text.startsWith(gameStoryKey)) {
     var json = JSON.parse(text.replace(gameStoryKey,''))
-    var result = json[localStorage.getItem(userIdKey)]
+    var result = json[getPlayerName()]
     if (result === undefined) {
       result = 'Please join the game.'
     }
@@ -478,12 +478,18 @@ function onNewGameClicked(e){
   saveMessage('startNewGame')
 }
 
+
+function getPlayerName() {
+  return localStorage.getItem(userIdKey);
+}
+
+
 // Triggered when the send new message form is submitted.
 function onJoinGameClick(e) {
   e.preventDefault();
   // Check that the user entered a message and is signed in.
   if (checkSignedInWithMessage()) {
-    var userId = localStorage.getItem(userIdKey);
+    var userId = getPlayerName()
     var message = newPlayerKey + userId;
     saveMessage(message);
   }
