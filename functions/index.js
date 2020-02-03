@@ -82,10 +82,11 @@ function onNewPlayerJoined(text) {
   var player = text.replace(newPlayerKey, '')
   if (!players.includes(player)) {
     players.push(player)
-    var message = `New player joined: ${player}, count = ${players.length}: ${players}`    
+    var message = `New player joined: ${player}`    
   } else {
-    var message = "Duplicated player."
+    var message = "Duplicated player"
   }
+  message = message.concat(`, count = ${players.length}: ${players}`)
   saveMessage(message)
 }
 
