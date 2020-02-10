@@ -26,6 +26,9 @@ const avalon = require('./avalon.js')
 //var debug = true 
 var debug = false
 
+// current King
+var currentKing = ''
+
 function initPlayers() {
   if (debug) {
     // debug mode: 8 players added
@@ -112,9 +115,14 @@ function startNewGame() {
   saveMessage(message)
   
   // Chooes the king
-  var king = avalon.chooseKing(players)
-  message = 'KING is ' + king
+  var newKing
+  do {
+    newKing = avalon.chooseKing(players)
+  }
+  while (newKing == currentKing)
+  message = 'KING is ' + newKing
   saveMessage(message)
+  currentKing = newKing
 }
 
 function saveMessage(text) {
