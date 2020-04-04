@@ -23,8 +23,8 @@ admin.initializeApp();
 
 const avalon = require('./avalon.js')
 
-var debug = true 
-//var debug = false
+//var debug = true 
+var debug = false
 
 // current King
 var currentKing = ''

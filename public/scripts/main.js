@@ -70,7 +70,7 @@ function saveMessage(messageText) {
 // Loads chat messages history and listens for upcoming ones.
 function loadMessages() {
   // Create the query to load the last 12 messages and listen for new ones.
-  var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(10);
+  var query = firebase.firestore().collection('messages').orderBy('timestamp', 'desc').limit(40);
   
   // Start listening to the query.
   query.onSnapshot(function(snapshot) {
@@ -396,6 +396,7 @@ var newGameButtonElement = document.getElementById('start-new-game');
 var joinGameButtonElement = document.getElementById('join-game');
 var voteUpButtonElement = document.getElementById('vote-up');
 var voteDownButtonElement = document.getElementById('vote-down');
+var startNewQuestButtonElement = document.getElementById('start-new-quest');
 
 ///////////// KEY ////////////
 
@@ -404,8 +405,8 @@ var voteDownButtonElement = document.getElementById('vote-down');
 // Logged in user name
 var userIdKey = 'userId'
 
-var succeedKey = 'SUCCEED'
-var failKey = 'FAIL'
+var succeedKey = 'Thành Công'
+var failKey = 'Thất bại'
 
 // SERVER - CLIENT key
 var voteKey = 'vote:'
@@ -417,7 +418,7 @@ var newPlayerKey = 'New player: '
 var gameStoryKey = 'gameStory:'
 
 // Default user name
-var defaultUserName = 'Master of the game'
+var defaultUserName = 'Người dẫn truyện'
 
 ///////////// KEY ////////////
 
@@ -507,13 +508,16 @@ function onVoteDownClicked(e) {
   saveMessage(message);
 }
 
+function onNewQuestClicked(e) {
+  saveMessage('Vote đêêêêê')
+}
 
 newSessionButtonElement.addEventListener('click', onNewSessonClicked);
 newGameButtonElement.addEventListener('click', onNewGameClicked);
 joinGameButtonElement.addEventListener('click', onJoinGameClick);
 voteUpButtonElement.addEventListener('click', onVoteUpClicked);
 voteDownButtonElement.addEventListener('click', onVoteDownClicked);
-
+startNewQuestButtonElement.addEventListener('click', onNewQuestClicked);
 
 // initialize Firebase
 initFirebaseAuth();
