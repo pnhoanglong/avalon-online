@@ -1,6 +1,5 @@
 
 var OBERON_POS = 9
-var SERVANT = "Arthur's Servant"
 // Constants
 var ROLES = [
     'Merlin', //0
@@ -8,10 +7,10 @@ var ROLES = [
     'Mordred', //2
     'Morgana', //3
     'Assassin', //4
-    SERVANT, //5
-    SERVANT, //6
-    SERVANT, //7
-    SERVANT, //8
+    'Người ngu muội', //5
+    'Người bình thường', //6
+    'Trung thần', //7
+    'Thần dân', //8
     'Oberon' //9
 ]
 var roleAssignedPlayers = [""]
@@ -21,7 +20,7 @@ var roleAssignedPlayers = [""]
  */
 function createMerlinInstructions() {
     var pos = 0
-    return roleAssignedPlayers[pos].concat(" is ", ROLES[pos], ". ", createAllDevilInstructions(true))
+    return roleAssignedPlayers[pos].concat(" là ", ROLES[pos], ". ", createAllDevilInstructions(true))
 }
 
 
@@ -32,14 +31,14 @@ function createPercivalInstructions() {
     var pos = 1
     var objects = [roleAssignedPlayers[0],roleAssignedPlayers[3]]
     objects.sort()
-    return roleAssignedPlayers[pos].concat(" is ", ROLES[pos], ". Merlin and Morgana are ", objects.toString())
+    return roleAssignedPlayers[pos].concat(" là ", ROLES[pos], ". Merlin và Morgana là ", objects.toString())
 }
 
 /**
  * DEVILS
  */
 function createOneDevilInstructions(pos) {
-    return roleAssignedPlayers[pos].concat(" is ",ROLES[pos], ". ", createAllDevilInstructions(false))
+    return roleAssignedPlayers[pos].concat(" là ",ROLES[pos], ". ", createAllDevilInstructions(false))
 }
 
 function createAllDevilInstructions(forMerlin) {
@@ -53,7 +52,7 @@ function createAllDevilInstructions(forMerlin) {
         devils.push(roleAssignedPlayers[OBERON_POS])
     }
     devils.sort()
-    return "Evils are: ".concat(devils.toString())
+    return "Quỷ là: ".concat(devils.toString())
 }
 
 /**
@@ -61,7 +60,7 @@ function createAllDevilInstructions(forMerlin) {
  * @param {*} pos 
  */
 function createSinglePlayerInstructions(pos) {
-    return roleAssignedPlayers[pos].concat(" is ",ROLES[pos])
+    return roleAssignedPlayers[pos].concat(" là ",ROLES[pos])
 }
 
 
@@ -85,7 +84,7 @@ exports.startGame  = function startGame(players){
         var playerCount = players.length
 
         if(playerCount < 7 || playerCount > 10) {
-            return "Players count must be (7<= N <=10), current count = " + playerCount
+            return "Số người chơi từ 7 -> 10, hiện giờ là  " + playerCount 
         }
 
         roleAssignedPlayers = assignRole(players)

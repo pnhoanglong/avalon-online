@@ -23,8 +23,8 @@ admin.initializeApp();
 
 const avalon = require('./avalon.js')
 
-//var debug = true 
-var debug = false
+var debug = true 
+//var debug = false
 
 // current King
 var currentKing = ''
@@ -32,7 +32,7 @@ var currentKing = ''
 function initPlayers() {
   if (debug) {
     // debug mode: 8 players added
-    players = ['Danh', 'Minh', 'Sang', 'Viet Anh', 'Quin', 'Myp', 'Hen',  'An']
+    players = ['Danh', 'Minh', 'Sang', 'Dao Human', 'Quin', 'TamDC', 'Hien',  'Luan']
   } else {
     players = []
   }
@@ -51,7 +51,7 @@ var newPlayerKey = 'New player: '
 var gameStoryKey = 'gameStory:'
 
 // Default user name
-var defaultUserName = 'Master of the game'
+var defaultUserName = 'Người dẫn truyện'
 
 ///////////// KEY ////////////
 
@@ -85,11 +85,11 @@ function onNewPlayerJoined(text) {
   var player = text.replace(newPlayerKey, '')
   if (!players.includes(player)) {
     players.push(player)
-    var message = `New player joined: ${player}`    
+    var message = `Thêm người chơi: ${player}`    
   } else {
-    var message = "Duplicated player"
+    var message = 'Tham gia rồi'
   }
-  message = message.concat(`, count = ${players.length}: ${players}`)
+  message = message.concat(', hiện có: ', players.length, " : ", createPlayerList())
   saveMessage(message)
 }
 
@@ -120,10 +120,20 @@ function startNewGame() {
     newKing = avalon.chooseKing(players)
   }
   while (newKing == currentKing)
-  message = 'KING is ' + newKing
+  message = 'Vua là ' + newKing
   saveMessage(message)
+  saveMessage("Người chơi: " + createPlayerList())
   currentKing = newKing
 }
+
+function createPlayerList() {
+  var playersString = ""
+  for (player of players) {
+    playersString = playersString.concat(player, "  ->  ")
+  }
+  return playersString
+}
+
 
 function saveMessage(text) {
   console.log(text)
