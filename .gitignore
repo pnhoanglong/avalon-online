@@ -10,8 +10,8 @@ GoogleService-Info.plist
 web/functions/node_modules
 web-start/functions/node_modules
 cloud-functions-start/functions/node_modules
-cloud-functions/functions/node_modules
-.firebaserc
+cloud-functions//node_modules
+.firebasercfunctions
 firebase-debug.log
-.firebase
+.firebase/**
 avalon/functions/node_modules
